@@ -1,4 +1,4 @@
-from src.settings import GOOGLE_API_KEY, SYSTEM_PROMPT
+from settings import GOOGLE_API_KEY, SYSTEM_PROMPT
 
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import ChatPromptTemplate

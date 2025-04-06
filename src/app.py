@@ -8,8 +8,8 @@ from pyrogram.handlers import MessageHandler
 from pyrogram.types import Message
 from pyrogram.enums import ChatAction
 
+from agents.llm import NutritionistAgent
 from settings import TELEGRAM_API_ID, TELEGRAM_API_HASH, TELEGRAM_TOKEN
-# ============ Constantes ============= #
 # ============== Código =============== #
 
 
@@ -33,16 +33,22 @@ class TelegramBot:
         self.logger.info(f'Usuário {message.from_user.id} ({message.from_user.first_name}) iniciou o bot.')
 
     async def handle_message(self, client: Client, message: Message):
-        user_id = message.from_user.id
+        telegram_id = message.from_user.id
         user_input = message.text
 
         await client.send_chat_action(chat_id=message.chat.id, action=ChatAction.TYPING)
 
         # Chame a IA Nutricionista aqui e obtenha a resposta
-        response = "Resposta da IA Nutricionista"
+        agent_nutricionista = NutritionistAgent(session_id=str(telegram_id))
+        try:
+            response = agent_nutricionista.run(f"telegram_id: {telegram_id}\nmessagem: {user_input}")
+        except Exception as e:
+            self.logger.error(f'Erro ao processar mensagem do usuário {telegram_id}: {str(e)}',exc_info=True)
+            response = "Desculpe, ocorreu um erro ao processar sua mensagem. Por favor, tente novamente."
+
 
         await message.reply_text(response)
-        self.logger(f'Resposta enviada para usuário {user_id}: {response}')
+        self.logger.info(f'Resposta enviada para usuário {telegram_id}: {response}')
 
     def _setup_handlers(self):
         start_handler = MessageHandler(
@@ -61,7 +67,7 @@ class TelegramBot:
         self.logger.info('Bot iniciado.')
         self.app.run()
 
-    # ============= Execução ============== #
+# ============= Execução ============== #
 if __name__ == "__main__":
     bot = TelegramBot()
     bot.app.run()
