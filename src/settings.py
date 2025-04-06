@@ -1,9 +1,12 @@
 # ============ Importação ============= #
 import os
+from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
 
 # ============ Constantes ============= #
 _ = load_dotenv(find_dotenv())
+
+BASE_DIR = Path(__file__).resolve().parent
 
 TELEGRAM_API_ID = os.environ['TELEGRAM_API_ID']
 TELEGRAM_API_HASH = os.environ['TELEGRAM_API_HASH']
