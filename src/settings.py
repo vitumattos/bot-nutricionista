@@ -23,3 +23,10 @@ SYSTEM_PROMPT = """Backstory:
         Expected Result:
         O agente deve ter um visual que una sua autoridade com a acessibilidade de um consultor digital. 
         Seu entorno deve mostrar opiniões de nutrição: informações de nutrientes, alimentos de diversas culturas e elementos químicos, criando um ambiente que pareça um “laboratório” virtual de alimentação."""
+
+USER = os.environ['PG_USER']
+PASSWORD = os.environ['PG_PASSWORD']
+HOST = os.environ['PG_HOST']
+PORT = os.environ['PG_PORT']
+DBNAME = os.environ['PG_DBNAME']
+DATABASE_URL = f"sqlite:///{BASE_DIR}/database/database.db"

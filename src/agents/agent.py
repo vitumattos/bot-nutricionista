@@ -1,4 +1,4 @@
-from settings import GOOGLE_API_KEY, SYSTEM_PROMPT,BASE_DIR
+from settings import GOOGLE_API_KEY, SYSTEM_PROMPT, DATABASE_URL
 
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import ChatPromptTemplate
@@ -10,11 +10,13 @@ from langchain_community.chat_message_histories import SQLChatMessageHistory
 
 
 memory = InMemoryChatMessageHistory()
+
+
 def get_by_session_id(session_id):
     return SQLChatMessageHistory(
-            session_id=session_id,
-            connection_string=f"sqlite:///{BASE_DIR}/database/database.db"
-        )
+        session_id=session_id,
+        connection_string=DATABASE_URL
+    )
 
 
 class NutritionistAgent:
@@ -44,7 +46,8 @@ class NutritionistAgent:
 
     def run(self, input):
         try:
-            response = self.chain_w_memory.invoke(
+            # utilizar self.chain_w_memory para conversar com memoria
+            response = self.chain.invoke(
                 {'input': input},
                 config={'configurable': {'session_id': self.session_id}}
             )
